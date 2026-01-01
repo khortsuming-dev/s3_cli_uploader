@@ -1,40 +1,38 @@
-name: CI - S3 CLI Uploader
+name: S3 CLI Uploader CI
 
+# Trigger on push or pull request to main branch
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        python-version: [3.12]
-
     steps:
+    # Step 1: Checkout your code
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+    # Step 2: Set up Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.12
 
+    # Step 3: Create virtual environment & install dependencies
     - name: Install dependencies
       run: |
         python -m venv venv
         source venv/bin/activate
-        pip install --upgrade pip
+        python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install moto pytest click boto3
 
-    - name: Run unit tests
+    # Step 4: Run unit tests
+    - name: Run tests
       run: |
         source venv/bin/activate
-        pytest --verbose tests/
+        pytest tests --maxfail=1 --disable-warnings -q
 
