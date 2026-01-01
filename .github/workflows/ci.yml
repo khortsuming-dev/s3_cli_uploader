@@ -1,38 +1,39 @@
-name: S3 CLI Uploader CI
+name: CI
 
-# Trigger on push or pull request to main branch
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout your code
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # Checkout the repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    # Step 2: Set up Python
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.12
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
 
-    # Step 3: Create virtual environment & install dependencies
-    - name: Install dependencies
-      run: |
-        python -m venv venv
-        source venv/bin/activate
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      # Create virtual environment and install dependencies
+      - name: Set up venv
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
 
-    # Step 4: Run unit tests
-    - name: Run tests
-      run: |
-        source venv/bin/activate
-        pytest tests --maxfail=1 --disable-warnings -q
+      # Run unit tests
+      - name: Run tests
+        run: |
+          source venv/bin/activate
+          pytest tests/ --disable-warnings -v
 
