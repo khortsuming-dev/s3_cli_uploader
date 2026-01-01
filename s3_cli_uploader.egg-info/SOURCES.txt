@@ -1,0 +1,8 @@
+pyproject.toml
+s3_cli_uploader.egg-info/PKG-INFO
+s3_cli_uploader.egg-info/SOURCES.txt
+s3_cli_uploader.egg-info/dependency_links.txt
+s3_cli_uploader.egg-info/top_level.txt
+tests/test_uploader.py
+uploader/__init__.py
+uploader/s3_uploader.py
