@@ -25,7 +25,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }} 
         run: |
-          echo "test1" > test.txt
+          echo "test12" > test.txt
           docker run --rm -v "$PWD/test.txt:/app/test.txt:ro" \
             -e AWS_ACCESS_KEY_ID \
             -e AWS_SECRET_ACCESS_KEY \
