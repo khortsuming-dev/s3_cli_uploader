@@ -23,7 +23,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-southeast-1
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }} 
         run: |
           echo "test" > test.txt
           docker run --rm -v "$PWD/test.txt:/app/test.txt:ro" \
