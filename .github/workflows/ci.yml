@@ -2,28 +2,34 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
+    branches:
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
 
-      - name: Install dependencies
+      - name: Build Docker image
+        run: docker build -t s3-uploader .
+
+      - name: Run CLI inside Docker
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-southeast-1
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -e .
-
-      - name: Run tests
-        run: |
-          pytest
+          echo "test" > test.txt
+          docker run --rm -v "$PWD/test.txt:/app/test.txt:ro" \
+            -e AWS_ACCESS_KEY_ID \
+            -e AWS_SECRET_ACCESS_KEY \
+            -e AWS_DEFAULT_REGION \
+            s3-uploader \
+            /app/test.txt tsuming-test-bucket
 
